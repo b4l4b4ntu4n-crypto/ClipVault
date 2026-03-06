@@ -37,15 +37,45 @@ export function exportDatabase(db: ClipboardDatabase): void {
     exportedAt: new Date().toISOString(),
   };
   const json = JSON.stringify(exportData, null, 2);
-  const blob = new Blob([json], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `clipboard-backup-${new Date().toISOString().slice(0, 10)}.json`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  const filename = `clipboard-backup-${new Date().toISOString().slice(0, 10)}.json`;
+
+  // Try Blob + createObjectURL first
+  try {
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 100);
+    return;
+  } catch {
+    // fall through to data URI
+  }
+
+  // Fallback: data URI
+  try {
+    const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(json);
+    const a = document.createElement("a");
+    a.href = dataUri;
+    a.download = filename;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch {
+    // Last resort: open in new tab so user can save manually
+    const win = window.open("", "_blank");
+    if (win) {
+      win.document.write("<pre>" + json.replace(/</g, "&lt;") + "</pre>");
+      win.document.title = filename;
+    }
+  }
 }
 
 export function importDatabase(file: File): Promise<ClipboardDatabase> {

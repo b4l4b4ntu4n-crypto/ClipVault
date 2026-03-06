@@ -5,7 +5,6 @@ import { ClipboardDatabase, ClipboardItem, Folder, FOLDER_COLORS } from "@/lib/t
 import {
   loadDatabase,
   saveDatabase,
-  exportDatabase,
   importDatabase,
   createFolder,
   createClipboardItem,
@@ -16,6 +15,7 @@ import AddItemModal from "./AddItemModal";
 import AddFolderModal from "./AddFolderModal";
 import EditItemModal from "./EditItemModal";
 import ConfirmModal from "./ConfirmModal";
+import ExportModal from "./ExportModal";
 
 export default function ClipboardManager() {
   const [db, setDb] = useState<ClipboardDatabase>(() => loadDatabase());
@@ -23,6 +23,7 @@ export default function ClipboardManager() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showAddItem, setShowAddItem] = useState(false);
   const [showAddFolder, setShowAddFolder] = useState(false);
+  const [showExport, setShowExport] = useState(false);
   const [editingItem, setEditingItem] = useState<ClipboardItem | null>(null);
   const [deletingItem, setDeletingItem] = useState<ClipboardItem | null>(null);
   const [deletingFolder, setDeletingFolder] = useState<Folder | null>(null);
@@ -121,8 +122,8 @@ export default function ClipboardManager() {
   }, []);
 
   const handleExport = useCallback(() => {
-    exportDatabase(db);
-  }, [db]);
+    setShowExport(true);
+  }, []);
 
   const handleImport = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -296,6 +297,13 @@ export default function ClipboardManager() {
           onConfirm={() => handleDeleteFolder(deletingFolder)}
           onCancel={() => setDeletingFolder(null)}
           danger
+        />
+      )}
+      {showExport && (
+        <ExportModal
+          jsonContent={JSON.stringify({ ...db, exportedAt: new Date().toISOString() }, null, 2)}
+          filename={`clipboard-backup-${new Date().toISOString().slice(0, 10)}.json`}
+          onClose={() => setShowExport(false)}
         />
       )}
     </div>

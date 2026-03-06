@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { ClipboardDatabase, ClipboardItem, Folder, FOLDER_COLORS } from "@/lib/types";
 import {
   loadDatabase,
@@ -28,8 +28,14 @@ export default function ClipboardManager() {
   const [deletingFolder, setDeletingFolder] = useState<Folder | null>(null);
   const [importError, setImportError] = useState<string | null>(null);
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
+  const saveRef = useRef(false);
 
+  // Skip saving on the very first render (initial load)
   useEffect(() => {
+    if (!saveRef.current) {
+      saveRef.current = true;
+      return;
+    }
     saveDatabase(db);
   }, [db]);
 

@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Template",
-  description: "A minimal Next.js starter template",
+  title: "ClipVault – Clipboard Manager",
+  description: "A portable clipboard text manager with folder organization and import/export support.",
 };
 
 export default function RootLayout({

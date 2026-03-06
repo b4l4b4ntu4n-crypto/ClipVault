@@ -14,6 +14,13 @@ The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. I
 - [x] ESLint configuration
 - [x] Memory bank documentation
 - [x] Recipe system for common features
+- [x] ClipVault – Clipboard Manager app built
+  - Folder/group organization with color-coded folders
+  - Add, edit, delete clipboard text items
+  - Copy to clipboard with visual feedback
+  - Search/filter across all clips
+  - Import/export database as JSON file (localStorage persistence)
+  - Footer credit: "Created by Zeger Grafity (link to facebook.com/zegergrafity) 2026"
 
 ## Current Structure
 

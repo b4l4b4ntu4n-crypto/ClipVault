@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "export",
+  basePath: "/ClipVault",
+  assetPrefix: "/ClipVault/",
+  trailingSlash: true,
 };
 
 export default nextConfig;

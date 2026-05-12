@@ -1,10 +1,13 @@
 {
   "name": "nextjs-template",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prepare-pages": "node scripts/export-pages.js",
+    "deploy": "npm run build && npm run prepare-pages",
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
